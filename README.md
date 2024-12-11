@@ -1,5 +1,5 @@
 
-# Nombre: LolNexuxApi
+# Nombre: LolApiRest
 
 ## Descripción
 
