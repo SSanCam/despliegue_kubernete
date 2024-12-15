@@ -9,7 +9,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -43,6 +42,7 @@ public class SecurityConfig {
      * Por así decirlo, al cargar la aplicación, Spring Security coge lo que tengamos aquí definido y lo "pone"
      * delante de nuestra app a modo de filtros de seguridad. Esto lo hace automáticamente.
      */
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -50,9 +50,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Deshabilitamos "Cross-Site Request Forgery" (CSRF) (No lo trataremos en este ciclo)
                 .authorizeHttpRequests(auth -> auth // Filtros para securizar diferentes endpoints de la aplicación
                         .requestMatchers("/usuarios/login", "/usuarios/register").permitAll() // Filtro que deja pasar todas las peticiones que vayan a los endpoints que definamos
-                        .requestMatchers("/ruta_protegida/**").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/productos/").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/productos/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated() // Para el resto de peticiones, el usuario debe estar autenticado
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())) // Establecemos el que el control de autenticación se realice por JWT

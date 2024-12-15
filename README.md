@@ -49,6 +49,8 @@ Se trabajará con las siguientes tres entidades:
 
 ### Registro y autenticación
 - `POST /usuarios/registro`: Crea un nuevo usuario.
+    - Logica de negocio:
+      - verificar que el nombre de usuario no esté ya en uso
    - Excepciones:
       - **400 Bad Request**: Si los datos del usuario son inválidos (el username o la password va vacio o es null).
       - **409 Conflict**: Si el `username` ya está registrado.
@@ -56,6 +58,8 @@ Se trabajará con las siguientes tres entidades:
 
 
 - `POST /usuarios/login`: Autentica un usuario y genera un token de acceso.
+    - Logica de negocio:
+      - verificar que las credenciales coincidan con un usuario existente
    - Excepciones:
       - **400 Bad Request**: Si faltan los parámetros `username` o `password` en la solicitud.
       - **401 Unauthorized**: Si las credenciales del usuario son incorrectas.
@@ -64,19 +68,25 @@ Se trabajará con las siguientes tres entidades:
 
 ### Gestión de usuarios
 - `GET /usuarios`: Obtiene la lista de usuarios (solo para admins).
+    - Logica de negocio:
+      - solo disponible para admins
   - Excepciones:
      - **403 Forbidden**: Si el usuario no tiene permisos de administrador para ver la lista de usuarios.
      - **500 Internal Server Error**: Si ocurre un error inesperado al obtener la lista de usuarios.
 
 
 - `GET /usuarios/{id}`: Obtiene los detalles de un usuario por su ID.
+    - Logica de negocio:
+        - solo el propio usuario o los admin pueden acceder a estos detalles
    - Excepciones:
       - **404 Not Found**: Si no se encuentra el usuario con el ID proporcionado.
       - **403 Forbidden**: Si el usuario no tiene permisos para obtener este usuario (no es el mismo usuario o no es admin).
       - **500 Internal Server Error**: Si hay un problema al obtener la información del usuario.
      
 
-- `PUT /usuarios/{id}`: Actualiza información de un usuario (ej.: username o rol).
+- `PUT /usuarios/{id}`: Actualiza información de un usuario (ej.: username).
+    - Logica de negocio:
+        - solo el propio usuario o los admin pueden acceder a estos detalles
    - Excepciones:
      - **400 Bad Request**: Si los datos proporcionados son incorrectos o están mal formateados.
      - **404 Not Found**: Si no se encuentra el usuario con el ID proporcionado.
@@ -85,6 +95,8 @@ Se trabajará con las siguientes tres entidades:
      
 
 - `DELETE /usuarios/{id}`:Elimina un usuario (solo admins).
+    - Logica de negocio:
+        - solo el disponible para admins
   - Excepciones:
     - **404 Not Found**: Si no se encuentra el usuario con el ID proporcionado.
     - **403 Forbidden**: Si el usuario no tiene permisos para eliminar este usuario.
@@ -95,6 +107,8 @@ Se trabajará con las siguientes tres entidades:
 
 ### Gestión de campeones
 - `POST /campeones`: Agrega un nuevo campeón (solo admins).
+    - Logica de negocio:
+        - solo el disponible para admins
   - Excepciones:
     - **400 Bad Request**: Si los datos del campeón son incorrectos o faltan campos necesarios (por ejemplo, `nombre` o `tipo`).
     - **403 Forbidden**: Si el usuario no tiene permisos para crear el campeón.
@@ -113,6 +127,8 @@ Se trabajará con las siguientes tres entidades:
 
 
 - `PUT /campeones/{id}`: Actualiza los detalles de un campeón (solo admins).
+    - Logica de negocio:
+        - solo el disponible para admins
   - Excepciones:
     - **400 Bad Request**: Si los datos proporcionados son incorrectos o están mal formateados.
     - **403 Forbidden**: Si el usuario no tiene permisos para actualizar el campeón.
@@ -121,6 +137,8 @@ Se trabajará con las siguientes tres entidades:
 
 
 - `DELETE /campeones/{id}`: Elimina un campeón (solo admins).
+    - Logica de negocio:
+        - solo el disponible para admins
    - Excepciones:
       - **404 Not Found**: Si no se encuentra el campeón con el ID proporcionado.
       - **403 Forbidden**: Si el usuario no tiene permisos para eliminar el campeón.
@@ -132,6 +150,8 @@ Se trabajará con las siguientes tres entidades:
 
 ### Gestión de partidas
 - `POST /partidas`: Registra una nueva partida asociada a un usuario y un campeón.
+    - Logica de negocio:
+        - validar los datos, solo el propio usuario o los admin pueden registrar partidas
    - Excepciones:
       - **400 Bad Request**: Si los datos de la partida son incorrectos o faltan parámetros necesarios (por ejemplo, `usuario_id` o `campeon_id`).
       - **404 Not Found**: Si no se encuentra el usuario o el campeón con los IDs proporcionados.
@@ -157,6 +177,8 @@ Se trabajará con las siguientes tres entidades:
      
 
 - `DELETE /partidas/{id}`: Elimina una partida registrada.
+    - Logica de negocio:
+        - solo el propio usuario o los admin pueden elimir partidas
    - Excepciones:
       - **404 Not Found**: Si no se encuentra la partida con el ID proporcionado.
       - **500 Internal Server Error**: Si ocurre un error al eliminar la partida.

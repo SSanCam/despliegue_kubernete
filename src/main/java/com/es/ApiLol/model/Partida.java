@@ -2,6 +2,7 @@ package com.es.ApiLol.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,8 +13,8 @@ public class Partida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column()
-    private Date fecha;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime fecha;
 
     @Column
     private String resultado;
