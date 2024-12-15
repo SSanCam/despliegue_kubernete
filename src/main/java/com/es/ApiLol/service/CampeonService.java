@@ -1,8 +1,10 @@
 package com.es.ApiLol.service;
 
 import com.es.ApiLol.dto.CampeonDTO;
+import com.es.ApiLol.error.exception.BadRequestException;
 import com.es.ApiLol.error.exception.DuplicateException;
 import com.es.ApiLol.error.exception.ForbiddenException;
+import com.es.ApiLol.error.exception.NotFoundException;
 import com.es.ApiLol.model.Campeon;
 import com.es.ApiLol.repository.CampeonRepository;
 import com.es.ApiLol.utils.Mapper;
@@ -51,5 +53,74 @@ public class CampeonService {
 
         return campeonesDTOS;
 
+    }
+
+
+    public CampeonDTO getById(String id) {
+
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        Campeon campeon = campeonRepository.findById(idL).orElseThrow(() ->
+                new NotFoundException("No existe un campeón con el ID proporcionado."));
+
+        return Mapper.mapToDTO(campeon);
+    }
+
+    public CampeonDTO updateById(
+            String id, CampeonDTO campeonDTO, Authentication auth
+    ) {
+
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        // Comprobamos si el solicitante es administrador
+        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new ForbiddenException("No tienes permisos para actualizar este campeón.");
+        }
+
+        // Si el usuario es un administrador, actualizamos el campeón
+        Campeon campeon = campeonRepository.findById(idL).orElseThrow(() ->
+                new NotFoundException("No existe un campeón con el ID proporcionado."));
+
+        campeon.setNombre(campeonDTO.getNombre());
+        campeon.setTipo(campeonDTO.getTipo());
+        campeonRepository.save(campeon);
+
+        return Mapper.mapToDTO(campeon);
+    }
+
+    public CampeonDTO deleteById(String id, Authentication auth) {
+
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        // Validamos si el solicitante es administrador
+        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new ForbiddenException("No tiene permiso para eliminar este campeón.");
+        }
+
+        // Si el usuario es un administrador, eliminamos el campeón
+        Campeon campeon = campeonRepository.findById(idL).orElseThrow(() ->
+                new NotFoundException("No existe un campeón con el ID proporcionado."));
+
+        campeonRepository.delete(campeon);
+
+        return Mapper.mapToDTO(campeon);
     }
 }

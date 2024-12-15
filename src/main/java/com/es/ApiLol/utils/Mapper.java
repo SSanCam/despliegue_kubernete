@@ -1,8 +1,10 @@
 package com.es.ApiLol.utils;
 
 import com.es.ApiLol.dto.CampeonDTO;
+import com.es.ApiLol.dto.PartidaDTO;
 import com.es.ApiLol.dto.UsuarioDTO;
 import com.es.ApiLol.model.Campeon;
+import com.es.ApiLol.model.Partida;
 import com.es.ApiLol.model.Usuario;
 import com.es.ApiLol.repository.UsuarioRepository;
 
@@ -30,5 +32,23 @@ public class Mapper {
         campeonDTO.setTipo(campeon.getTipo());
 
         return campeonDTO;
+    }
+
+    public static PartidaDTO mapToDTO(Partida partida) {
+        PartidaDTO partidaDto = new PartidaDTO();
+        partidaDto.setResultado(partida.getResultado());
+        partidaDto.setUsuario(partida.getUsuario());
+        partidaDto.setCampeon(partida.getCampeon());
+        partidaDto.setDuracion(partida.getDuracion());
+        return partidaDto;
+    }
+
+    public static Partida mapToEntity(PartidaDTO partidaDto) {
+        Partida partida = new Partida();
+        partida.setResultado(partidaDto.getResultado());
+        partida.setUsuario(partidaDto.getUsuario());
+        partida.setCampeon(partidaDto.getCampeon());
+        partida.setDuracion(partidaDto.getDuracion());
+        return partida;
     }
 }

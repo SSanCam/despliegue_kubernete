@@ -43,6 +43,12 @@ Se trabajará con las siguientes tres entidades:
 
 ---
 
+## Diagrama Entidad-Relación
+
+![Entidad Relacion](EntidadRelacion.png)
+
+---
+
 # Endpoints de la API
 
 ## **Endpoints de Usuario**

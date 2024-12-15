@@ -5,13 +5,12 @@ import com.es.ApiLol.model.Usuario;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
 public class PartidaDTO {
-
-    private Date fecha;
 
     private String resultado;
 
@@ -21,8 +20,8 @@ public class PartidaDTO {
 
     private int duracion;
 
-    public PartidaDTO(Date fecha, String resultado, Usuario usuario, Campeon campeon, int duracion) {
-        this.fecha = fecha;
+    public PartidaDTO(String resultado, Usuario usuario, Campeon campeon, int duracion) {
+
         this.resultado = resultado;
         this.usuario = usuario;
         this.campeon = campeon;
