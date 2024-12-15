@@ -88,7 +88,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTO> updateById(
             @PathVariable String id,
-            @RequestBody UsuarioDTO usuarioDTO, Authentication auth
+            @RequestBody UsuarioDTO usuarioDTO
     ) {
         if (id == null || id.isBlank()) {
             throw new BadRequestException("El id del usuario no es valido");
@@ -98,18 +98,18 @@ public class UsuarioController {
             throw new BadRequestException("El usuario no es valido");
         }
 
-        UsuarioDTO usuarioActualizado = usuarioService.updateById(id, usuarioDTO, auth);
+        UsuarioDTO usuarioActualizado = usuarioService.updateById(id, usuarioDTO);
         return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> deleteById(@PathVariable String id, Authentication auth) {
+    public ResponseEntity<UsuarioDTO> deleteById(@PathVariable String id) {
         if (id == null || id.isBlank()) {
             throw new BadRequestException("El id del usuario no es valido");
         }
 
-        UsuarioDTO usuarioDTO = usuarioService.deleteById(id, auth);
+        UsuarioDTO usuarioDTO = usuarioService.deleteById(id);
 
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }

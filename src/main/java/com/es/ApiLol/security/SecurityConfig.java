@@ -9,6 +9,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -49,7 +50,27 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable()) // Deshabilitamos "Cross-Site Request Forgery" (CSRF) (No lo trataremos en este ciclo)
                 .authorizeHttpRequests(auth -> auth // Filtros para securizar diferentes endpoints de la aplicación
+
                         .requestMatchers("/usuarios/login", "/usuarios/register").permitAll() // Filtro que deja pasar todas las peticiones que vayan a los endpoints que definamos
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() //Que tenga el mismo nombre que el de la peticion
+                        .requestMatchers(HttpMethod.GET, "/usuarios/").hasRole("ADMIN") //Que sea Admin
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("ADMIN") //Que sea Admin
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("ADMIN") //Que sea Admin
+
+                        // Los usuarios solo pueden ver sus propias partidas y postear partidas de ellos mismos
+                        .requestMatchers(HttpMethod.POST, "/partidas/").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/partidas/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/partidas/").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/partidas/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/partidas/{id}").hasRole("ADMIN")
+
+                        // Solo pueden añadir, actualizar y borrar campeones los admins
+                        .requestMatchers(HttpMethod.POST, "/campeones/").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/campeones/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/campeones/").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/campeones/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/campeones/{id}").hasRole("ADMIN")
+
                         .anyRequest().authenticated() // Para el resto de peticiones, el usuario debe estar autenticado
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())) // Establecemos el que el control de autenticación se realice por JWT

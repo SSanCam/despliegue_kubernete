@@ -24,18 +24,12 @@ public class CampeonService {
     private CampeonRepository campeonRepository;
 
 
-    public CampeonDTO create(CampeonDTO campeonDTO, Authentication auth) {
-
-        // Comprobamos si el solicitante es administrador
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            throw new ForbiddenException("No tienes permisos para agregar un campeón.");
-        }
+    public CampeonDTO create(CampeonDTO campeonDTO) {
 
         if (campeonRepository.findByNombre(campeonDTO.getNombre()).isPresent()) {
             throw new DuplicateException("El campeon ya existe");
         }
 
-        // Si el usuario es un administrador, creamos el nuevo campeón
         Campeon nuevoCampeon = new Campeon();
         nuevoCampeon.setNombre(campeonDTO.getNombre());
         nuevoCampeon.setTipo(campeonDTO.getTipo());
@@ -73,7 +67,7 @@ public class CampeonService {
     }
 
     public CampeonDTO updateById(
-            String id, CampeonDTO campeonDTO, Authentication auth
+            String id, CampeonDTO campeonDTO
     ) {
 
         Long idL;
@@ -84,12 +78,6 @@ public class CampeonService {
             throw new BadRequestException("Id no válido");
         }
 
-        // Comprobamos si el solicitante es administrador
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            throw new ForbiddenException("No tienes permisos para actualizar este campeón.");
-        }
-
-        // Si el usuario es un administrador, actualizamos el campeón
         Campeon campeon = campeonRepository.findById(idL).orElseThrow(() ->
                 new NotFoundException("No existe un campeón con el ID proporcionado."));
 
@@ -100,7 +88,7 @@ public class CampeonService {
         return Mapper.mapToDTO(campeon);
     }
 
-    public CampeonDTO deleteById(String id, Authentication auth) {
+    public CampeonDTO deleteById(String id) {
 
         Long idL;
 
@@ -110,12 +98,6 @@ public class CampeonService {
             throw new BadRequestException("Id no válido");
         }
 
-        // Validamos si el solicitante es administrador
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            throw new ForbiddenException("No tiene permiso para eliminar este campeón.");
-        }
-
-        // Si el usuario es un administrador, eliminamos el campeón
         Campeon campeon = campeonRepository.findById(idL).orElseThrow(() ->
                 new NotFoundException("No existe un campeón con el ID proporcionado."));
 

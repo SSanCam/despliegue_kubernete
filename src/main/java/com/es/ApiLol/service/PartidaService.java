@@ -1,6 +1,7 @@
 package com.es.ApiLol.service;
 
 import com.es.ApiLol.dto.PartidaDTO;
+import com.es.ApiLol.error.exception.BadRequestException;
 import com.es.ApiLol.error.exception.ForbiddenException;
 import com.es.ApiLol.model.Partida;
 import com.es.ApiLol.repository.CampeonRepository;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.nio.MappedByteBuffer;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,4 +56,36 @@ public class PartidaService {
     }
 
 
+    public List<PartidaDTO> getPartidas(Authentication auth) {
+        List<Partida> partidas = partidaRepository.findAll();
+
+        List<PartidaDTO> partidaDTOS = new ArrayList<>();
+
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            partidas.forEach(partida -> partidaDTOS.add(Mapper.mapToDTO(partida)));
+            return partidaDTOS;
+        } else {
+            partidas.forEach(partida -> {
+                if (partida.getUsuario().getUsername().equals(auth.getName())) {
+                    partidaDTOS.add(Mapper.mapToDTO(partida));
+                }
+            });
+            return partidaDTOS;
+        }
+    }
+
+    public PartidaDTO getPartidaById(String id) {
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        Partida partida = partidaRepository.findById(idL).orElseThrow(() ->
+                new BadRequestException("No existe una partida con el ID proporcionado."));
+
+        return Mapper.mapToDTO(partida);
+    }
 }

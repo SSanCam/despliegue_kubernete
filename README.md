@@ -92,11 +92,11 @@ Se trabajará con las siguientes tres entidades:
 
 - `PUT /usuarios/{id}`: Actualiza información de un usuario (ej.: username).
     - Logica de negocio:
-        - solo el propio usuario o los admin pueden acceder a estos detalles
+        - solo los admin pueden actualizar usuarios
    - Excepciones:
      - **400 Bad Request**: Si los datos proporcionados son incorrectos o están mal formateados.
      - **404 Not Found**: Si no se encuentra el usuario con el ID proporcionado.
-     - **403 Forbidden**: Si el usuario no tiene permisos para modificar este usuario (no es el mismo usuario o no es admin).
+     - **403 Forbidden**: Si el usuario no tiene permisos para modificar este usuario (o no es admin).
      - **500 Internal Server Error**: Si ocurre un error al actualizar el usuario.
      
 
@@ -164,7 +164,9 @@ Se trabajará con las siguientes tres entidades:
       - **500 Internal Server Error**: Si ocurre un error al registrar la partida.
      
 
-- `GET /partidas`: Lista todas las partidas registradas (puede incluir filtros como usuario o resultado).
+- `GET /partidas`: Lista todas las partidas registradas del usuario o todas si es admin.
+    - Logica de nogocio:
+        - si el usuario que hace la peticion es admin obtenie todas las partidas, si no lo es obtiene sus propias partidas
    - Excepciones:
       - **500 Internal Server Error**: Si ocurre un error al obtener la lista de partidas.
      
@@ -188,22 +190,3 @@ Se trabajará con las siguientes tres entidades:
    - Excepciones:
       - **404 Not Found**: Si no se encuentra la partida con el ID proporcionado.
       - **500 Internal Server Error**: Si ocurre un error al eliminar la partida.
-
-
-### Consultas específicas
-- `GET /usuarios/{id}/partidas`: Obtiene todas las partidas de un usuario específico.
-   - Excepciones:
-      - **404 Not Found**: Si no se encuentran partidas para el usuario con el ID proporcionado.
-      - **500 Internal Server Error**: Si ocurre un error al obtener las partidas del usuario.
-     
-
-- `GET /campeones/{id}/partidas`: Obtiene todas las partidas jugadas con un campeón específico.
-   - Excepciones:
-      - **404 Not Found**: Si no se encuentran partidas para el campeón con el ID proporcionado.
-      - **500 Internal Server Error**: Si ocurre un error al obtener las partidas de un campeón.
-
-
-- `GET /partidas/estadisticas`: Devuelve estadísticas generales (ej.: victorias totales, campeón más usado, duración promedio de partidas).
-  - Excepciones:
-     - **500 Internal Server Error**: Si ocurre un error al calcular las estadísticas de las partidas.
-

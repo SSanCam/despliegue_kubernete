@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +21,13 @@ public class CampeonController {
 
     @PostMapping("/")
     public ResponseEntity<CampeonDTO> create(
-            @RequestBody CampeonDTO campeonDTO, Authentication auth)
+            @RequestBody CampeonDTO campeonDTO)
     {
         if (campeonDTO == null || campeonDTO.getNombre().isBlank() || campeonDTO.getTipo().isBlank()) {
             throw new IllegalArgumentException("El campeon no es valido");
         }
 
-        CampeonDTO nuevoCampeon = campeonService.create(campeonDTO, auth);
+        CampeonDTO nuevoCampeon = campeonService.create(campeonDTO);
         return new ResponseEntity<>(nuevoCampeon, HttpStatus.CREATED);
     }
 
@@ -55,7 +54,7 @@ public class CampeonController {
     @PutMapping("/{id}")
     public ResponseEntity<CampeonDTO> updateById(
             @PathVariable String id,
-            @RequestBody CampeonDTO campeonDTO, Authentication auth
+            @RequestBody CampeonDTO campeonDTO
     ) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El id del campeon no es valido");
@@ -65,23 +64,20 @@ public class CampeonController {
             throw new IllegalArgumentException("El campeon no es valido");
         }
 
-        CampeonDTO campeonActualizado = campeonService.updateById(id, campeonDTO, auth);
+        CampeonDTO campeonActualizado = campeonService.updateById(id, campeonDTO);
         return new ResponseEntity<CampeonDTO>(campeonActualizado, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CampeonDTO> deleteById(
-            @PathVariable String id, Authentication auth
+            @PathVariable String id
     ) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El id del campeon no es valido");
         }
 
-        CampeonDTO campeonDTO = campeonService.deleteById(id, auth);
+        CampeonDTO campeonDTO = campeonService.deleteById(id);
         return new ResponseEntity<>(campeonDTO, HttpStatus.OK);
     }
-
-
-
 }

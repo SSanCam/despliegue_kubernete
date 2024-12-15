@@ -106,7 +106,7 @@ public class UsuarioService implements UserDetailsService {
         return Mapper.mapToDTO(usuario);
     }
 
-    public UsuarioDTO updateById(String id, UsuarioDTO usuarioDTO, Authentication auth) {
+    public UsuarioDTO updateById(String id, UsuarioDTO usuarioDTO) {
         Long idL;
 
         try {
@@ -115,10 +115,7 @@ public class UsuarioService implements UserDetailsService {
             throw new BadRequestException("Id no válido");
         }
 
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
 
-            throw new NotAuthorizedException("No tienes permisos para actualizar este usuario.");
-        }
         Usuario usuario = usuarioRepository.findById(idL).orElseThrow(() ->
                 new NotFoundException("No existe un usuario con el ID proporcionado."));
 
@@ -131,7 +128,7 @@ public class UsuarioService implements UserDetailsService {
         return Mapper.mapToDTO(usuario);
     }
 
-    public UsuarioDTO deleteById(String id, Authentication auth) {
+    public UsuarioDTO deleteById(String id) {
 
         Long idL;
 
@@ -144,10 +141,6 @@ public class UsuarioService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findById(idL).orElseThrow(() ->
                 new NotFoundException("No existe un usuario con el ID proporcionado."));
 
-        // Comprobamos si el solicitante es administrador
-        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            throw new ForbiddenException("No tienes permisos para eliminar este usuario.");
-        }
 
         // Si el usuario es un administrador, eliminamos el usuario
         usuarioRepository.delete(usuario);
