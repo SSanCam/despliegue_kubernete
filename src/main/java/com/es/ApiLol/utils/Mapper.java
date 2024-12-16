@@ -8,6 +8,9 @@ import com.es.ApiLol.model.Partida;
 import com.es.ApiLol.model.Usuario;
 import com.es.ApiLol.repository.UsuarioRepository;
 
+/**
+ * Clase utilizada para mapear entre entidades del modelo y objetos DTO.
+ */
 public class Mapper {
     public static UsuarioDTO mapToDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();

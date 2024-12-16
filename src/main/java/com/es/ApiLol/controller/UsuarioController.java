@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de usuarios en la API de League of Legends.
+ * Proporciona endpoints para registro, inicio de sesión y manejo de usuarios (CRUD).
+ */
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -28,7 +32,14 @@ public class UsuarioController {
     @Autowired
     private TokenService tokenService;
 
-
+    /**
+     * Inicia sesión de un usuario y genera un token JWT.
+     *
+     * @param usuarioDTO Datos del usuario (nombre de usuario y contraseña).
+     * @return Token JWT generado.
+     * @throws NotFoundException Si hay un error durante la autenticación.
+     * @throws GenericInternalException Si ocurre un error al generar el token.
+     */
     @PostMapping("/login")
     public String login(
             @RequestBody UsuarioDTO usuarioDTO
@@ -49,7 +60,13 @@ public class UsuarioController {
         }
     }
 
-
+    /**
+     * Registra un nuevo usuario en el sistema.
+     *
+     * @param usuarioRegisterDTO Datos del usuario a registrar.
+     * @return ResponseEntity con el usuario registrado y el código de estado HTTP 200 (OK).
+     * @throws BadRequestException Si los datos del usuario son inválidos.
+     */
     @PostMapping("/register")
     public ResponseEntity<UsuarioDTO> register(
             @RequestBody UsuarioDTO usuarioRegisterDTO
@@ -64,6 +81,11 @@ public class UsuarioController {
 
     }
 
+    /**
+     * Obtiene una lista de todos los usuarios registrados.
+     *
+     * @return ResponseEntity con la lista de usuarios y el código de estado HTTP 200 (OK).
+     */
     @GetMapping("/")
     public ResponseEntity<List<UsuarioDTO>> getAll() {
 
@@ -72,6 +94,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
+    /**
+     * Obtiene los datos de un usuario específico por su ID.
+     *
+     * @param id Identificador único del usuario.
+     * @param auth Información de autenticación del usuario.
+     * @return ResponseEntity con los datos del usuario y el código de estado HTTP 200 (OK).
+     * @throws BadRequestException Si el ID del usuario es inválido.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getById(
             @PathVariable String id, Authentication auth
@@ -85,6 +115,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
+    /**
+     * Actualiza los datos de un usuario específico por su ID.
+     *
+     * @param id Identificador único del usuario a actualizar.
+     * @param usuarioDTO Datos nuevos del usuario.
+     * @return ResponseEntity con el usuario actualizado y el código de estado HTTP 200 (OK).
+     * @throws BadRequestException Si el ID o los datos del usuario son inválidos.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTO> updateById(
             @PathVariable String id,
@@ -102,7 +140,13 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
 
-
+    /**
+     * Elimina un usuario específico por su ID.
+     *
+     * @param id Identificador único del usuario a eliminar.
+     * @return ResponseEntity con el usuario eliminado y el código de estado HTTP 200 (OK).
+     * @throws BadRequestException Si el ID del usuario es inválido.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<UsuarioDTO> deleteById(@PathVariable String id) {
         if (id == null || id.isBlank()) {
