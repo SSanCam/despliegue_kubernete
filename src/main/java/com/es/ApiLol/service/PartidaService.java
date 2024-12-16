@@ -3,6 +3,7 @@ package com.es.ApiLol.service;
 import com.es.ApiLol.dto.PartidaDTO;
 import com.es.ApiLol.error.exception.BadRequestException;
 import com.es.ApiLol.error.exception.ForbiddenException;
+import com.es.ApiLol.error.exception.NotFoundException;
 import com.es.ApiLol.model.Partida;
 import com.es.ApiLol.repository.CampeonRepository;
 import com.es.ApiLol.repository.PartidaRepository;
@@ -87,5 +88,75 @@ public class PartidaService {
                 new BadRequestException("No existe una partida con el ID proporcionado."));
 
         return Mapper.mapToDTO(partida);
+    }
+
+    public void deleteById(String id) {
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        Partida partida = partidaRepository.findById(idL).orElseThrow(() ->
+                new NotFoundException("No existe una partida con el ID proporcionado."));
+        partidaRepository.delete(partida);
+    }
+
+    public PartidaDTO updatePartida(String id, PartidaDTO partidaDTO) {
+
+        Long idL;
+
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id no válido");
+        }
+
+        Partida partida = partidaRepository.findById(idL).orElseThrow(() ->
+                new NotFoundException("No existe una partida con el ID proporcionado."));
+
+        partida.setFecha(LocalDateTime.now());
+
+        partida.setResultado(partidaDTO.getResultado());
+
+        partida.setDuracion(partidaDTO.getDuracion());
+
+        partida.setCampeon(campeonRepository.findByNombre(partidaDTO.getCampeon().getNombre()).orElseThrow(() ->
+                new BadRequestException("No existe un campeón con el nombre proporcionado.")));
+
+        partida.setUsuario(usuarioRepository.findByUsername(partidaDTO.getUsuario().getUsername()).orElseThrow(() ->
+                new BadRequestException("No existe un usuario con el username proporcionado.")));
+
+        partida = partidaRepository.save(partida);
+
+        return Mapper.mapToDTO(partida);
+    }
+
+
+    public List<PartidaDTO> getPartidasByCampeon(String nombre, Authentication auth) {
+        List<Partida> partidas = partidaRepository.findAll();
+        List<PartidaDTO> partidaDTOS = new ArrayList<>();
+
+        // Valida si el usuario tiene rol de administrador
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            // Si es administrador, devuelve todas las partidas con el campeón solicitado
+            partidas.forEach(partida -> {
+                if (partida.getCampeon().getNombre().equalsIgnoreCase(nombre)) {
+                    partidaDTOS.add(Mapper.mapToDTO(partida));
+                }
+            });
+        } else {
+            // Si no es administrador, filtra por el usuario actual y el campeón solicitado
+            partidas.forEach(partida -> {
+                if (partida.getCampeon().getNombre().equalsIgnoreCase(nombre)
+                        && partida.getUsuario().getUsername().equals(auth.getName())) {
+                    partidaDTOS.add(Mapper.mapToDTO(partida));
+                }
+            });
+        }
+
+        return partidaDTOS;
     }
 }

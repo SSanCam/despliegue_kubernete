@@ -1,26 +1,26 @@
-package com.es.ApiLol.dto;
+    package com.es.ApiLol.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+    import lombok.Getter;
+    import lombok.Setter;
 
-@Getter
-@Setter
-public class UsuarioDTO {
+    @Getter
+    @Setter
+    public class UsuarioDTO {
 
-    private String username;
-
-
-    private String password;
-
-    private String roles;
+        private String username;
 
 
-    public UsuarioDTO(String username, String password, String roles) {
+        private String password;
 
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
+        private String roles;
+
+
+        public UsuarioDTO(String username, String password, String roles) {
+
+            this.username = username;
+            this.password = password;
+            this.roles = roles;
+        }
+
+        public UsuarioDTO() {}
     }
-
-    public UsuarioDTO() {}
-}

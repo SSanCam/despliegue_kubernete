@@ -110,6 +110,10 @@ public class SecurityConfig {
      * JWTDECODER decodifica un token
      * @return
      */
+    /**
+     * JWTDECODER decodifica un token
+     * @return
+     */
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
@@ -125,4 +129,5 @@ public class SecurityConfig {
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
+
 }

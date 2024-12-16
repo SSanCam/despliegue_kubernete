@@ -37,11 +37,38 @@ public class PartidaController {
         return new ResponseEntity<>(partidas, HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<PartidaDTO> getPartidaById(@RequestParam String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<PartidaDTO> getPartidaById(@PathVariable String id) {
 
         PartidaDTO partida = partidaService.getPartidaById(id);
 
         return new ResponseEntity<>(partida, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(
+            @PathVariable String id
+    ) {
+        partidaService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PartidaDTO> updateById(
+            @PathVariable String id,
+            @RequestBody PartidaDTO partidaDTO
+    ) {
+        Validator.validarPartida(partidaDTO);
+
+        PartidaDTO updatedPartida = partidaService.updatePartida(id, partidaDTO);
+        return new ResponseEntity<>(updatedPartida, HttpStatus.OK);
+    }
+
+    @GetMapping("/campeon/{nombre}")
+    public ResponseEntity<List<PartidaDTO>> getPartidasByCampeon(
+            @PathVariable String nombre, Authentication auth) {
+
+        List<PartidaDTO> partidas = partidaService.getPartidasByCampeon(nombre, auth);
+        return new ResponseEntity<>(partidas, HttpStatus.OK);
     }
 }

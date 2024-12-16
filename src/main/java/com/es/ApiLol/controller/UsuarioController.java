@@ -60,7 +60,7 @@ public class UsuarioController {
 
         UsuarioDTO usuarioNuevo = usuarioService.registerUser(usuarioRegisterDTO);
 
-        return new ResponseEntity<UsuarioDTO>(usuarioRegisterDTO, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioNuevo, HttpStatus.OK);
 
     }
 
