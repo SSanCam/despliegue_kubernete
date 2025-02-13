@@ -45,57 +45,28 @@ Deberás ver algo como ésto:
 Client Version: v1.28.0
 ```
 
-* ## Creación de la base de datos 
+* ## Acceder a la base de datos
 
-Al usar DockerDesktop, creamos nuestra base de daots en un contenedor:
+La base de datos MySQL está preconfigurada con los siguientes detalles:
 
-1. Desgarga la imagen de MySQL
+* Host: localhost
 
-```bash
-docker pull mysql:5.7
-```
+* Puerto: 3306
 
-2. Crea y ejecuta el conenedor
+* Nombre de la base de datos: apilol_bd
 
-```bash 
-docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 mysql:5.7
-``` 
+* Usuario: root
 
-Explicación de los parámetros:
+* Contraseña: 
 
-    -d: Ejecuta el contenedor en segundo plano (modo "detached").
-
-    --name mysql-container: Asigna un nombre al contenedor (mysql-container en este caso).
-
-    -e MYSQL_ROOT_PASSWORD=my-secret-pw: Define la contraseña del usuario root de MySQL.
-
-    -p 3306:3306: Mapea el puerto 3306 del contenedor al puerto 3306 de tu máquina local.
-
-    mysql:5.7: Especifica la imagen de MySQL que se usará.
-
-Podemos verificar el contenedor activo por terminal con:
-
-```bash
-docker ps
-```
-
-En nuestro archivo *application.properties* situada en nuestro directorio *root/resources/* agregamos las líneas encesarias para conectarnos a la BBDD a través de nuestra API
-
-```properties
-# Configuración de la base de datos MySQL
-spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-# URL de conexión a la base de datos
-spring.datasource.url=jdbc:mysql://localhost:3306/nombre_bd
-
-# Credenciales de acceso
-spring.datasource.username=nombre_usuario
-spring.datasource.password=clave_usuario
-```
 
 * ## Despliegue de la API
 
+Desde el directorio raiz del proyecto:
+
+Tenemos un Dockerfile con las características necesarias para su despliegue en DockerDesktop
+
+Tras compilar el proyecto en un .jar construimos su imagen en un contenedor 
 
 * ## Despliegue en Kubernetes
 
