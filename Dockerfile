@@ -11,3 +11,4 @@ COPY build/libs/ApiLol-0.0.1-SNAPSHOT.war ./ROOT.war
 EXPOSE 8080
 
 # Comando para ejecutar Tomcat
+CMD ["catalina.sh", "run"]
