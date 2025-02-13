@@ -1,14 +1,13 @@
-# Usa una imagen base de Java
-FROM openjdk:17-jdk-slim
+# Usa una imagen base de Tomcat
+FROM tomcat:9.0-jdk17-openjdk-slim
 
 # Establece el directorio de trabajo
-WORKDIR /app
+WORKDIR /usr/local/tomcat/webapps/
 
-# Copia el archivo JAR de tu aplicación al contenedor
-COPY build/libs/ApiLol-0.0.1-SNAPSHOT.jar app.jar
+# Copia el archivo WAR de tu aplicación al contenedor
+COPY build/libs/ApiLol-0.0.1-SNAPSHOT.war ./ROOT.war
 
-# Expone el puerto en el que tu aplicación escucha
-EXPOSE 8082
+# Expone el puerto en el que Tomcat escucha
+EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando para ejecutar Tomcat
