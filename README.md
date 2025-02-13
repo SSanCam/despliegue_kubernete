@@ -1,3 +1,33 @@
+# Aplicación que estamos usando
+
+Estamos usando la aplicación la cual fue el trabajo de fin de trimster pasado, esta es una api rest la cual se estructura principalmente en 3 entidades 
+
+### **Usuario**: Almacena información sobre los usuarios del sistema.
+### **Campeón**: Contiene información sobre los campeones disponibles en el sistema.
+### **Partida**: Registra las partidas jugadas y sus estadisticas, vinculando a un usuario con un campeón utilizado en una partida específica.
+
+# EndPoints
+
+Cada entidad tiene un par de enpoints pero voy a poner solo los más relevantes al proyecto y a lo que vamos a usar:
+
+## Usuario:
+
+### Registro y autenticación
+- `POST /usuarios/registro`: Crea un nuevo usuario.
+
+## Campeones:
+
+### Gestión de campeones
+- `POST /campeones`: Agrega un nuevo campeón (solo admins)
+
+
+## Partidas:
+
+### Gestión de partidas
+- `POST /partidas`: Registra una nueva partida asociada a un usuario y un campeón.
+
+
+
 
 # Preparación del entorno de Kubernete:
 

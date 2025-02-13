@@ -1,4 +1,3 @@
-
 # Nombre: LolApiRest
 
 ## Descripción
