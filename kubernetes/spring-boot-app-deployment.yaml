@@ -14,14 +14,21 @@ spec:
     spec:
       containers:
         - name: spring-boot-app
-          image: manuelmgarmorn/mi-apli-lol:latest
+          image: manuelmgarmorn/api-lol:1.1
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-service:3306/apilol2_bd
+            - name: SPRING_DATASOURCE_USERNAME
+              value: usuario
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
           ports:
             - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-boot-app
+  name: spring-boot-app-service
 spec:
   selector:
     app: spring-boot-app
@@ -29,4 +36,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: LoadBalancer  # Esto te da una IP pública para acceder
+  type: NodePort
