@@ -45,6 +45,9 @@ Cada entidad tiene un par de enpoints pero voy a poner solo los más relevantes 
 
 * Desde la terminal de DockerDesktop, ejecuta los siguientes comandos: 
 
+
+### Instalación de kubectl
+
 *Windows (powershell)*
 
 ```bash

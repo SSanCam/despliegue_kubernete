@@ -1,0 +1,42 @@
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> docker images
+REPOSITORY                                TAG                                                                           IMAGE ID       CREATED          SIZE
+ssancam/api-lol                           latest                                                                        28739b205200   31 seconds ago   791MB
+docker/desktop-kubernetes                 kubernetes-v1.31.4-cni-v1.6.0-critools-v1.31.1-cri-dockerd-v0.3.15-1-debian   1405239673ef   2 months ago     577MB
+registry.k8s.io/kube-apiserver            v1.31.4                                                                       ace6a943b058   2 months ago     125MB
+registry.k8s.io/kube-controller-manager   v1.31.4                                                                       4bd1d4a449e7   2 months ago     118MB
+registry.k8s.io/kube-scheduler            v1.31.4                                                                       1a3081cb7d21   2 months ago     90.8MB
+registry.k8s.io/kube-proxy                v1.31.4                                                                       1739b3febca3   2 months ago     126MB
+registry.k8s.io/etcd                      3.5.16-0                                                                      c6a9d11cc5c0   5 months ago     211MB
+registry.k8s.io/coredns/coredns           v1.11.3                                                                       9caabbf6238b   6 months ago     85.1MB
+registry.k8s.io/etcd                      3.5.15-0                                                                      a6dc63e6e8cf   6 months ago     208MB
+registry.k8s.io/pause                     3.10                                                                          ee6521f290b2   9 months ago     1.06MB
+docker/desktop-vpnkit-controller          dc331cb22850be0cdd97c84a9cfecaf44a1afb6e                                      7ecf567ea070   21 months ago    47MB
+docker/desktop-storage-provisioner        v2.0                                                                          115d77efe6e2   3 years ago      59.2MB
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> ^C
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> docker push ssancam/api-lol:latest
+The push refers to repository [docker.io/ssancam/api-lol]
+6ce99fdf16e8: Layer already exists
+7f57569aa373: Pushed
+55da3dcc433f: Layer already exists
+4f4fb700ef54: Layer already exists
+1fe172e4850f: Layer already exists
+d3a834bf712c: Layer already exists
+68e8e5778cdd: Pushed
+6d561c741348: Layer already exists
+44d3aa8d0766: Layer already exists
+latest: digest: sha256:28739b2052006807163e223efca617d36127be3fddf8b193e49f3f2fb845bccf size: 856
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> kubectl apply -f kubernetes/
+deployment.apps/mysql-db created
+service/mysql-db created
+deployment.apps/spring-boot-app created
+service/spring-boot-app created
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> kubectl get pods
+NAME                              READY   STATUS              RESTARTS   AGE
+mysql-db-69569fb6f7-rldxl         0/1     ContainerCreating   0          7s
+spring-boot-app-bbd7bcf64-flxnn   0/1     ContainerCreating   0          6s
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete> kubectl get services
+NAME              TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes        ClusterIP      10.96.0.1      <none>        443/TCP          40h
+mysql-db          ClusterIP      None           <none>        3306/TCP         29s
+spring-boot-app   LoadBalancer   10.106.63.59   localhost     8080:32241/TCP   28s
+PS C:\Users\saras\Desktop\Workspaces\kubernete\despliegue_kubernete>
